@@ -15,14 +15,16 @@ def load_data():
     df = df.loc[(df["y"] != '') & (~df["y"].isna()),]
     return  df
 
-def load_data_for_type3():
+def load_data_for_type3(prediction_from_type2):
     df = get_input_data()
-    df["y"] = df[Config.TYPE_COLS[2]]
+    df["y2"]=prediction_from_type2
+    df["y"] = df[Config.TYPE_COLS[1]]
     df = df.loc[(df["y"] != '') & (~df["y"].isna()),]
     return  df
 
-def load_data_for_type4():
+def load_data_for_type4(prediction_from_type3):
     df = get_input_data()
+    df["y3"]=prediction_from_type3
     df["y"] = df[Config.TYPE_COLS[2]]
     df = df.loc[(df["y"] != '') & (~df["y"].isna()),]
     return  df
@@ -57,22 +59,29 @@ def type_prediction(df):
         X, group_df = get_embeddings(group_df)
         data = get_data_object(X, group_df)
         type_score , predictions=perform_modelling(data, group_df, name)
-        return type_score, predictions
+        return type_score, predictions 
 
 
 if __name__ == '__main__':
+    # Loading data for type 2 
     df=load_data()
-    df_for_type3=load_data_for_type3()
-    df_for_type4=load_data_for_type4()
-    print("Prediction Type 2")
-    type2 , prediction2=type_prediction(df)
-    print("Prediction Type 3")
-    type3 , prediction3=type_prediction(df_for_type3)
-    print("Prediction Type 4")
-    type4 , prediction4=type_prediction(df_for_type4)
-    print(f"Prediction of type 2= {type2}")
-    average=(type2+type3+type4)/3
-    print(f"average = {average}")
-    print(prediction2)
+
+
+    print("Prediction Type 2")    
+    type2 , prediction2 =type_prediction(df)     # predicting the model for type 2 
+    prediction2=pd.Series(prediction2)          # converting the predicting into series
+    print(type2)
     
+    print("Prediction Type 3")
+    df_for_type3=load_data_for_type3(prediction2)         # predicting the model for type 3 
+    type3 , prediction3=type_prediction(df_for_type3)     # converting the predicting into series
+    prediction3=pd.Series(prediction3) 
+
+    print("Prediction Type 4")
+    df_for_type4=load_data_for_type4(prediction3)          # predicting the model for type 4
+    type4 , prediction4=type_prediction(df_for_type4)      # converting the predicting into series
+    
+    
+    average=(type2+type3+type4)/3
+    print(f"Average Accuracy Achieved by the Model  = {average}")
     
