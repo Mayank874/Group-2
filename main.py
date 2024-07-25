@@ -14,15 +14,15 @@ def load_data():
     df["y"] = df[Config.CLASS_COL]
     df = df.loc[(df["y"] != '') & (~df["y"].isna()),]
     return  df
-
-def load_data_for_type3(prediction_from_type2):
-    df = get_input_data()
+                                                                                   
+def load_data_for_type3(prediction_from_type2):                                               #  Teking the predicting Values of type 2 in the type 3
+    df = get_input_data()                                                  
     df["y2"]=prediction_from_type2
     df["y"] = df[Config.TYPE_COLS[1]]
     df = df.loc[(df["y"] != '') & (~df["y"].isna()),]
     return  df
 
-def load_data_for_type4(prediction_from_type3):
+def load_data_for_type4(prediction_from_type3):                                               #  Teking the predicting Values of type 3 in the type 4
     df = get_input_data()
     df["y3"]=prediction_from_type3
     df["y"] = df[Config.TYPE_COLS[2]]
