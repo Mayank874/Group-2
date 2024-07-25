@@ -1,8 +1,9 @@
 import numpy as np
+from embeddings import *
 import pandas as pd
-from model.base import BaseModel
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score
 from numpy import *
 import random
 num_folds = 0
@@ -16,7 +17,7 @@ pd.set_option('display.width', 1000)
 pd.set_option('display.max_colwidth', 200)
 
 
-class RandomForest(BaseModel):
+class RandomForest():
     def __init__(self,
                  model_name: str,
                  embeddings: np.ndarray,
@@ -35,10 +36,12 @@ class RandomForest(BaseModel):
     def predict(self, X_test: pd.Series):
         predictions = self.mdl.predict(X_test)
         self.predictions = predictions
+        
 
     def print_results(self, data):
         print(classification_report(data.y_test, self.predictions))
-
+        return accuracy_score(data.y_test,self.predictions),self.predictions
+        
 
     def data_transform(self) -> None:
         ...
